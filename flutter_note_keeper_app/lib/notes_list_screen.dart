@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'note_detail.dart';
+import 'dart:async';
 
 class NoteListScreen extends StatefulWidget {
   @override
@@ -15,7 +16,10 @@ class _NoteListScreenState extends State<NoteListScreen> {
       body: getNotesListView(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          moveToNoteDetailScreen("Add Note");
+          //  moveToNoteDetailScreen("Add Note");
+
+          //executeLongTask();
+          executeLongTaskUsingThen();
           debugPrint("clickedFAB ");
         },
         child: Icon(Icons.add),
@@ -50,9 +54,24 @@ class _NoteListScreenState extends State<NoteListScreen> {
     });
   }
 
-  String downloadFile() {
+  void executeLongTask() async {
+    print("operation started");
+    String fileContent = await downloadFile();
+    print("operation ended result $fileContent");
+  }
+
+  void executeLongTaskUsingThen() {
+    print("operation started");
+    Future<String> fileContent = downloadFile();
+    fileContent.then((value) {
+      print("operation ended result $fileContent");
+    });
+  }
+
+  Future<String> downloadFile() {
     Future<String> result = Future.delayed(Duration(seconds: 6), () {
       return "My Secret file content";
     });
+    return result;
   }
 }
